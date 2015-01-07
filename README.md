@@ -15,7 +15,8 @@ Equalyzr is plain javascript and doesnt interfere with any other scripts so it c
 
 Example:
 
-```<div equalyzr="test">
+```
+<div equalyzr="test">
   <p>test</p>
   <p>test1</p>
   <p>test2</p>
@@ -35,7 +36,8 @@ This will equalize the two divs to be set to the maximum height
 
 Example 2:
 
-```<div equalyzr="test">
+```
+<div equalyzr="test">
   <p>test</p>
   <p>test1</p>
   <p>test2</p>
