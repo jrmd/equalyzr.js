@@ -1,7 +1,7 @@
 /**
  *     Equalyzr by Jerome Duncan
  *
- *     Author Url:      http://itsjero.me
+ *     Author Url:      http://jrmd.io
  *     Author Twitter:  @jrmd_
  */
 var equalyzr = (function (win, doc) {
@@ -10,8 +10,11 @@ var equalyzr = (function (win, doc) {
   var exports = {};
 
   exports.version = "v0.1.0";
+  exports.options = {};
 
-  exports.init = function () {
+  exports.init = function (options) {
+    exports.options = options ? options : exports.options;
+
     var elements = exports.eles();
 
     exports.each(elements, function (index, value) {
@@ -24,7 +27,7 @@ var equalyzr = (function (win, doc) {
         exports.resize(selector, maxHeight);
       }, 500));
 
-      exports.resize(selector, maxHeight);
+      exports.resize(selector, maxHeight, value);
 
     });
   };
@@ -50,7 +53,22 @@ var equalyzr = (function (win, doc) {
     ele.addEventListener(evt, func, false);
   };
 
-  exports.resize = function (selector, high) {
+  exports.resize = function (selector, high, attr) {
+
+    attr = attr ? attr : null;
+
+    if(attr !== null) {
+      exports.options.modules[attr] = exports.options.modules[attr] ? exports.options.modules[attr] : null;
+
+      if(exports.options.modules[attr] !== null) {
+        exports.options.modules[attr].minWidth = exports.options.modules[attr].minWidth ? exports.options.modules[attr].minWidth : null;
+        if(document.body.clientWidth <= exports.options.modules[attr].minWidth) {
+          return;
+        }
+      }
+    }
+
+
     var elements = exports.query(selector);
 
     exports.each(elements, function (index, value) {
