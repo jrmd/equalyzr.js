@@ -1,0 +1,23 @@
+{
+  "name": "equalyzr.js",
+  "version": "0.1.1",
+  "homepage": "https://github.com/jrmd-/equalyzr.js",
+  "authors": [
+    "Jerome Duncan <jerome@bigbitecreative.com>"
+  ],
+  "description": "A simple script to equalize the heights of elements",
+  "main": "dist/equalyzr.js",
+  "keywords": [
+    "height",
+    "equalize",
+    "equalyzr"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
