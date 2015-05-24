@@ -4,128 +4,115 @@
  *     Author Url:      http://jrmd.io
  *     Author Twitter:  @jrmd_
  */
-var equalyzr = (function (win, doc) {
+(function (window, document, undefined) {
   'use strict';
 
-  var exports = {};
+  /**
+   * Helpers
+   */
 
-  exports.version = "v0.1.0";
-  exports.options = {};
+  var each = function (arr, func) {
+    var i = 0;
 
-  exports.init = function (options) {
-    exports.options = options ? options : exports.options;
-
-    var elements = exports.eles();
-
-    exports.each(elements, function (index, value) {
-      var selector = '[equalyzr="'+value+'"]';
-      var maxHeight = exports.maxheight(selector);
-
-      exports.on('resize', window, exports.throttle(function () {
-        exports.resize(selector, 'auto');
-        maxHeight = exports.maxheight(selector);
-        exports.resize(selector, maxHeight);
-      }, 500));
-
-      exports.resize(selector, maxHeight, value);
-
-    });
-  };
-
-  exports.each = function (arr, func) {
-    for (var i = 0; i < arr.length; i++) {
+    while(i < arr.length) {
       func(i, arr[i]);
+      i++;
     }
-  };
+  }
 
-  exports.maxheight = function (selector) {
+  var maxheight =function (elements) {
     var max = 0;
-    var elements = exports.query(selector);
 
-    exports.each(elements, function (index, value) {
-      max = max > value.offsetHeight ? max : value.offsetHeight;
+    each(elements, function (index, value) {
+      var height = parseFloat(window.getComputedStyle(value, null).getPropertyValue('height'));
+      max = max > height ? max : height;
     });
 
-    return max + "px";
-  };
+    return max;
+  }
 
-  exports.on = function (evt, ele, func) {
-    ele.addEventListener(evt, func, false);
-  };
-
-  exports.resize = function (selector, high, attr) {
-
-    attr = attr ? attr : null;
-
-    if(attr !== null) {
-      exports.options.modules[attr] = exports.options.modules[attr] ? exports.options.modules[attr] : null;
-
-      if(exports.options.modules[attr] !== null) {
-        exports.options.modules[attr].minWidth = exports.options.modules[attr].minWidth ? exports.options.modules[attr].minWidth : null;
-        if(document.body.clientWidth <= exports.options.modules[attr].minWidth) {
-          return;
-        }
-      }
-    }
-
-
-    var elements = exports.query(selector);
-
-    exports.each(elements, function (index, value) {
-      value.style.height = high;
-    });
-  };
-
-  exports.query = function (selector) {
+  var query = function (selector) {
     return document.querySelectorAll(selector);
   };
 
-  exports.eles = function () {
-    var elements = [];
-    var equalyzers = exports.query('[equalyzr]');
-    exports.each(equalyzers, function (index, value) {
-      if(elements.indexOf(value.getAttribute('equalyzr')) === -1)
-        elements.push(value.getAttribute('equalyzr'));
-    });
-    return elements;
-  };
+  var group =  function (elem) {
+    var elements = document.querySelectorAll(elem);
+    var groups = [];
+    var arrayIndex = -1;
+    var last = 0;
 
-  exports.debounce = function(func, wait, immediate) {
-    var timeout;
-    return function() {
-      var context = this, args = arguments;
-      var later = function() {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
-  };
+    each(elements, function (index, elem) {
+      var offset = offsetTop(elem);
 
-  exports.throttle = function (fn, threshhold, scope) {
-    threshhold || (threshhold = 250);
-    var last,
-        deferTimer;
-    return function () {
-      var context = scope || this;
-
-      var now = +new Date,
-          args = arguments;
-      if (last && now < last + threshhold) {
-        // hold on to it
-        clearTimeout(deferTimer);
-        deferTimer = setTimeout(function () {
-          last = now;
-          fn.apply(context, args);
-        }, threshhold);
-      } else {
-        last = now;
-        fn.apply(context, args);
+      if (groups[arrayIndex] !== undefined && last !== offset) {
+        var max = maxheight(groups[arrayIndex]);
+        setHeight(groups[arrayIndex], max);
+        offset = offsetTop(elem);
       }
-    };
+
+      if (last !== offset) {
+        arrayIndex++;
+      }
+
+      if(groups[arrayIndex] === undefined) {
+        groups[arrayIndex] = [];
+        last = offset;
+      }
+
+      last = offset;
+      groups[arrayIndex].push(elem);
+    });
+
+    return groups;
   }
-  return exports;
+
+  var offsetTop = function (elem) {
+    return elem.offsetTop;
+  }
+
+  var setHeight = function (elements, height) {
+    each(elements, function (index, element) {
+      element.style.height = height;
+    })
+  }
+
+  /**
+   * Equalyzr Object
+   * @param {String} elem
+   */
+  var Equalyzr = function (elem) {
+
+    // Return if feature test fails
+    if (! ('querySelector' in document && 'addEventListener' in window) ) {
+      return;
+    }
+
+    this.elem = elem;
+    this.init();
+  };
+
+  Equalyzr.prototype = {
+    constructor: Equalyzr,
+
+    init: function () {
+      var _self = this;
+
+      this.resize();
+
+      window.addEventListener('resize', function (e) {
+        _self.resize();
+      }, false);
+    },
+
+    resize: function () {
+      var grouped;
+      var elements = query(this.elem);
+
+      setHeight(elements, 'auto');
+
+      grouped = group(this.elem);
+    }
+  };
+
+  window.Equalyzr = Equalyzr;
 }(window, document));

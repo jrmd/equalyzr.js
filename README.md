@@ -9,27 +9,27 @@ Equalyzr is plain javascript and doesnt interfere with any other scripts so it c
 
 ##How to use it
 
->Simply put a data attribute called equalyzr and make it equal an identifier
 >Add The script
->Initialize it
+>Initialize it with `var equalyze = new Equalyzr(elementIdentifier)
+>Identifier can be an element type, a class, a id or a data attribute
 
 Example:
 
 ```
-<div equalyzr="test">
+<div class="demo-element">
   <p>test</p>
   <p>test1</p>
   <p>test2</p>
   <p>test3</p>
 </div>
 
-<div equalyzr="test">
+<div class="demo-element">
   <p>test</p>
   <p>test3</p>
 </div>
 
 <script src="/equalyzr.js"></script>
-<script> equalyzr.init(); </script>
+<script> var demo = new Equalyzr('.demo-element'); </script>
 ```
 This will equalize the two divs to be set to the maximum height
 
@@ -37,35 +37,23 @@ This will equalize the two divs to be set to the maximum height
 Example 2:
 
 ```
-<div equalyzr="test">
+<div class="demo-element">
   <p>test</p>
   <p>test1</p>
   <p>test2</p>
   <p>test3</p>
 </div>
 
-<div equalyzr="anotherDiv">
+<div class="demo2-element">
   <p>test</p>
   <p>test3</p>
 </div>
 
 <script src="/equalyzr.js"></script>
-<script> equalyzr.init(); </script>
+<script>
+  var demo1 = new Equalyzr('.demo-element');
+  var demo2 = new Equalyzr('.demo2-element');
+</script>
 ```
 
 These would not interact as their attributes are different
-
-
-##Methods
-
-### Main Method
-
-`equalyzr.init()` Initializes the script to equalyze height.
-
-### Other Available Methods
-
-`equalyzr.query(selector)` returns an array of html nodes that match your description
-
-`equalyzr.each(arr, function (index, value) {})` cycles through an array executing a function
-
-`equalyzr.resize(selector, height)` sets the height of elements with the selector
