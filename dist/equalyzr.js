@@ -20,7 +20,7 @@
     }
   }
 
-  var maxheight =function (elements) {
+  var maxheight = function (elements) {
     var max = 0;
 
     each(elements, function (index, value) {
@@ -109,7 +109,6 @@
       var elements = query(this.elem);
 
       setHeight(elements, 'auto');
-
       grouped = group(this.elem);
     }
   };
