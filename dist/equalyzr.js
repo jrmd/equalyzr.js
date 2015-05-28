@@ -72,7 +72,7 @@
 
   var setHeight = function (elements, height) {
     each(elements, function (index, element) {
-      element.style.height = height;
+      element.style.height = height + 'px';
     })
   }
 
