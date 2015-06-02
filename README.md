@@ -5,7 +5,6 @@ Equalyzr.js is a script made from plain Javascript to simply equalize heights be
 ##Why use it?
 
 Equalyzr is plain javascript and doesnt interfere with any other scripts so it can work alongside them because of equalyzr's modular system.
-  - throttled so it doesnt slow performance down too much.
 
 ##How to use it
 
